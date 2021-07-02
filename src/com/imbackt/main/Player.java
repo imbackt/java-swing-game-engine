@@ -12,14 +12,14 @@ public class Player extends GameObject {
     public void tick() {
         x += velocityX;
         y += velocityY;
+
+        x = Game.clamp(x, 0, Game.WIDTH - 48);
+        y = Game.clamp(y, 0, Game.HEIGHT - 71);
     }
 
     @Override
     public void render(Graphics g) {
-        if (id == ID.PLAYER)
-            g.setColor(Color.WHITE);
-        if (id == ID.PLAYER2)
-            g.setColor(Color.CYAN);
+        g.setColor(Color.WHITE);
         g.fillRect(x, y, 32, 32);
     }
 }

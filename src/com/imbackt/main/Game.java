@@ -2,6 +2,7 @@ package com.imbackt.main;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
@@ -11,14 +12,17 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
 
     private final Handler handler;
+    private final HUD hud;
 
     public Game() {
         handler = new Handler();
+        hud = new HUD();
         addKeyListener(new KeyInput(handler));
         new Window(WIDTH, HEIGHT, "Game!", this);
 
         handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.PLAYER));
-        handler.addObject(new Player(WIDTH / 2 - 32 + 64, HEIGHT / 2 - 32, ID.PLAYER2));
+        Random r = new Random();
+        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BASIC_ENEMY));
     }
 
     public synchronized void start() {
@@ -38,6 +42,7 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
+        requestFocus();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -57,7 +62,7 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                //System.out.println("FPS: " + frames);
+                System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }
@@ -66,6 +71,7 @@ public class Game extends Canvas implements Runnable {
 
     private void tick() {
         handler.tick();
+        hud.tick();
     }
 
     private void render() {
@@ -82,8 +88,14 @@ public class Game extends Canvas implements Runnable {
 
         handler.render(g);
 
+        hud.render(g);
+
         g.dispose();
         bs.show();
+    }
+
+    public static int clamp(int val, int min, int max) {
+        return Math.max(min, Math.min(max, val));
     }
 
     public static void main(String[] args) {
