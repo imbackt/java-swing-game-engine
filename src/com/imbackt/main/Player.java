@@ -1,16 +1,11 @@
 package com.imbackt.main;
 
 import java.awt.*;
-import java.util.Random;
 
 public class Player extends GameObject {
 
     public Player(int x, int y, ID id) {
         super(x, y, id);
-
-        Random r = new Random();
-        velocityX = r.nextInt(5) + 1;
-        velocityY = r.nextInt(5);
     }
 
     @Override
@@ -21,7 +16,10 @@ public class Player extends GameObject {
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.WHITE);
+        if (id == ID.PLAYER)
+            g.setColor(Color.WHITE);
+        if (id == ID.PLAYER2)
+            g.setColor(Color.CYAN);
         g.fillRect(x, y, 32, 32);
     }
 }

@@ -2,7 +2,6 @@ package com.imbackt.main;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
@@ -14,14 +13,12 @@ public class Game extends Canvas implements Runnable {
     private final Handler handler;
 
     public Game() {
-        new Window(WIDTH, HEIGHT, "Game!", this);
         handler = new Handler();
+        addKeyListener(new KeyInput(handler));
+        new Window(WIDTH, HEIGHT, "Game!", this);
 
-        Random r = new Random();
-
-        for (int i = 0; i < 50; i++) {
-            handler.addObject(new Player(0, 0, ID.PLAYER));
-        }
+        handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.PLAYER));
+        handler.addObject(new Player(WIDTH / 2 - 32 + 64, HEIGHT / 2 - 32, ID.PLAYER2));
     }
 
     public synchronized void start() {
@@ -60,7 +57,7 @@ public class Game extends Canvas implements Runnable {
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
-                System.out.println("FPS: " + frames);
+                //System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }
